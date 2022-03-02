@@ -5,8 +5,12 @@ import ro.ase.cts.g1099.recap.exceptions.InsufficientFundsException;
 
 public abstract class BankAccount extends Account{
 	
-	String iban;
-	double balance;
+	protected String iban;
+	protected double balance = 0;
+	
+	public BankAccount(String iban) {
+		this.iban = iban;
+	}
 	
 	@Override
 	public double getBalance() {
@@ -30,12 +34,14 @@ public abstract class BankAccount extends Account{
 		if(amount > this.balance) {
 			throw new InsufficientFundsException();
 		}
+		
+		this.balance -= amount;
 	}
 
 	@Override
-	public void transfer(Account destination, double amount) {
-		// TODO Auto-generated method stub
-		
+	public void transfer(Account destination, double amount) throws IllegalTransferException, InsufficientFundsException {
+		this.withdraw(amount);
+		destination.deposit(amount);
 	}
 
 	
